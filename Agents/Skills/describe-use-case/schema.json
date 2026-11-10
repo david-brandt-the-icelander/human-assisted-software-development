@@ -62,11 +62,29 @@
             "type": "string",
             "minLength": 1
           },
-          "actor": {
-            "type": "string",
-            "minLength": 1
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "symbol": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "path",
+                "symbol"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
           },
-          "actorDocument": {
+          "actor": {
             "type": "string",
             "minLength": 1
           },
@@ -79,14 +97,16 @@
             "items": {
               "type": "string",
               "minLength": 1
-            }
+            },
+            "minItems": 1
           },
           "postconditions": {
             "type": "array",
             "items": {
               "type": "string",
               "minLength": 1
-            }
+            },
+            "minItems": 1
           },
           "flow": {
             "type": "array",
@@ -101,17 +121,7 @@
                   "type": "string",
                   "minLength": 1
                 },
-                "participantKind": {
-                  "enum": [
-                    "actor",
-                    "system"
-                  ]
-                },
                 "action": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "actorDocument": {
                   "type": "string",
                   "minLength": 1
                 },
@@ -136,15 +146,49 @@
                     "additionalProperties": false
                   },
                   "minItems": 1
+                },
+                "participantKind": {
+                  "enum": [
+                    "actor",
+                    "system"
+                  ]
+                },
+                "actorDocument": {
+                  "type": "string",
+                  "minLength": 1
                 }
               },
               "required": [
                 "id",
                 "actor",
-                "participantKind",
-                "action"
+                "action",
+                "sources",
+                "participantKind"
               ],
-              "additionalProperties": false
+              "additionalProperties": false,
+              "allOf": [
+                {
+                  "if": {
+                    "properties": {
+                      "participantKind": {
+                        "const": "actor"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "actorDocument"
+                    ]
+                  },
+                  "else": {
+                    "not": {
+                      "required": [
+                        "actorDocument"
+                      ]
+                    }
+                  }
+                }
+              ]
             },
             "minItems": 1
           },
@@ -191,7 +235,34 @@
               "required": [
                 "atStep",
                 "condition",
-                "outcome"
+                "outcome",
+                "sources"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 0
+          },
+          "actorDocument": {
+            "type": "string",
+            "minLength": 1
+          },
+          "supportingActors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "actorDocument": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "name",
+                "actorDocument"
               ],
               "additionalProperties": false
             }
@@ -201,9 +272,14 @@
           "id",
           "name",
           "description",
+          "sources",
           "actor",
           "goal",
-          "flow"
+          "preconditions",
+          "postconditions",
+          "flow",
+          "alternatives",
+          "actorDocument"
         ],
         "additionalProperties": false
       },
@@ -221,6 +297,7 @@
               "state",
               "deployment",
               "use-case",
+              "user-journey",
               "capability",
               "feature",
               "operation"
@@ -246,7 +323,8 @@
           "relationship"
         ],
         "additionalProperties": false
-      }
+      },
+      "minItems": 0
     }
   },
   "required": [
@@ -256,7 +334,8 @@
     "folder",
     "description",
     "sources",
-    "entities"
+    "entities",
+    "relatedViews"
   ],
   "additionalProperties": false
 }

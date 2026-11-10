@@ -15,11 +15,18 @@
       "id": "submit-job",
       "name": "Submit job",
       "description": "Queues a job for the worker.",
-      "action": "POST",
+      "sources": [
+        {
+          "path": "src/ExampleWorker/JobsController.cs",
+          "symbol": "ExampleWorker.JobsController.Submit"
+        }
+      ],
       "entrypoint": {
         "path": "src/ExampleWorker/JobsController.cs",
         "symbol": "ExampleWorker.JobsController.Submit"
       },
+      "action": "command",
+      "transport": "POST /api/jobs",
       "authorization": "Signed-in operators.",
       "result": "202 with the job's id.",
       "failures": [

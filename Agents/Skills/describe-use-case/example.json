@@ -15,8 +15,13 @@
       "id": "process-job",
       "name": "Process a queued job",
       "description": "An operator's job is picked up, run and reported.",
+      "sources": [
+        {
+          "path": "src/ExampleWorker/Worker.cs",
+          "symbol": "ExampleWorker.Worker.RunAsync"
+        }
+      ],
       "actor": "Operator",
-      "actorDocument": "Actors/example-operator.md",
       "goal": "A submitted job finishes and its result is visible.",
       "preconditions": [
         "The operator is signed in."
@@ -28,33 +33,39 @@
         {
           "id": "submit",
           "actor": "Operator",
-          "participantKind": "actor",
           "action": "Submits a job from the admin page.",
+          "sources": [
+            {
+              "path": "src/ExampleWorker/JobsController.cs",
+              "symbol": "ExampleWorker.JobsController.Submit"
+            }
+          ],
+          "participantKind": "actor",
           "actorDocument": "Actors/example-operator.md"
         },
         {
           "id": "run",
           "actor": "Worker",
-          "participantKind": "system",
           "action": "Takes the job from the queue and runs it.",
           "sources": [
             {
               "path": "src/ExampleWorker/Worker.cs",
               "symbol": "ExampleWorker.Worker.RunAsync"
             }
-          ]
+          ],
+          "participantKind": "system"
         },
         {
           "id": "report",
           "actor": "Worker",
-          "participantKind": "system",
           "action": "Records the result on the job.",
           "sources": [
             {
               "path": "src/ExampleWorker/Worker.cs",
               "symbol": "ExampleWorker.Worker.ReportAsync"
             }
-          ]
+          ],
+          "participantKind": "system"
         }
       ],
       "alternatives": [
@@ -69,6 +80,13 @@
             }
           ]
         }
+      ],
+      "actorDocument": "Actors/example-operator.md",
+      "supportingActors": [
+        {
+          "name": "Alerting service",
+          "actorDocument": "Actors/example-alerting-service.md"
+        }
       ]
     }
   ],
@@ -78,6 +96,12 @@
       "folder": "src/ExampleWorker",
       "path": "src/ExampleWorker/.dev/operation.json",
       "relationship": "The operations the steps call."
+    },
+    {
+      "kind": "user-journey",
+      "folder": "src/ExampleWorker",
+      "path": "src/ExampleWorker/.dev/user-journey.json",
+      "relationship": "The journey this use case is one stage of."
     }
   ]
 }

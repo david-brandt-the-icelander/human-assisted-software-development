@@ -62,9 +62,27 @@
             "type": "string",
             "minLength": 1
           },
-          "action": {
-            "type": "string",
-            "minLength": 1
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "symbol": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "path",
+                "symbol"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
           },
           "entrypoint": {
             "type": "object",
@@ -84,6 +102,18 @@
             ],
             "additionalProperties": false
           },
+          "action": {
+            "enum": [
+              "command",
+              "query"
+            ],
+            "description": "command when it changes something, query when it only reads. Judge by the effect, not the method name or the transport."
+          },
+          "transport": {
+            "type": "string",
+            "minLength": 1,
+            "description": "How a caller reaches it, such as POST /api/scores, an exported function, a message or a scheduled job."
+          },
           "authorization": {
             "type": "string",
             "minLength": 1
@@ -97,17 +127,20 @@
             "items": {
               "type": "string",
               "minLength": 1
-            }
+            },
+            "minItems": 0
           }
         },
         "required": [
           "id",
           "name",
           "description",
-          "action",
+          "sources",
           "entrypoint",
+          "action",
           "authorization",
-          "result"
+          "result",
+          "failures"
         ],
         "additionalProperties": false
       },
@@ -125,6 +158,7 @@
               "state",
               "deployment",
               "use-case",
+              "user-journey",
               "capability",
               "feature",
               "operation"
@@ -150,7 +184,8 @@
           "relationship"
         ],
         "additionalProperties": false
-      }
+      },
+      "minItems": 0
     }
   },
   "required": [
@@ -160,7 +195,8 @@
     "folder",
     "description",
     "sources",
-    "entities"
+    "entities",
+    "relatedViews"
   ],
   "additionalProperties": false
 }

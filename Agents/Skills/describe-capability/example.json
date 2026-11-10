@@ -15,16 +15,22 @@
       "id": "job-execution",
       "name": "Job execution",
       "description": "Runs queued jobs.",
-      "responsibility": "Takes jobs from the queue, runs each once and records the outcome.",
-      "access": [
-        "Operators may submit jobs.",
-        "Only the worker runs them."
+      "sources": [
+        {
+          "path": "src/ExampleWorker/Worker.cs",
+          "symbol": "ExampleWorker.Worker.RunAsync"
+        }
       ],
+      "responsibility": "Takes jobs from the queue, runs each once and records the outcome.",
       "operations": [
         {
           "path": "src/ExampleWorker/Worker.cs",
           "symbol": "ExampleWorker.Worker.RunAsync"
         }
+      ],
+      "access": [
+        "Operators may submit jobs.",
+        "Only the worker runs them."
       ]
     }
   ],
@@ -34,6 +40,12 @@
       "folder": "src/ExampleWorker",
       "path": "src/ExampleWorker/.dev/feature.json",
       "relationship": "The behavior this capability offers."
+    },
+    {
+      "kind": "operation",
+      "folder": "src/ExampleWorker",
+      "path": "src/ExampleWorker/.dev/operation.json",
+      "relationship": "The operations through which the capability is reached."
     }
   ]
 }

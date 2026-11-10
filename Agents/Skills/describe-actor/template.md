@@ -1,11 +1,11 @@
-# <Actor, named the way the journeys and diagrams name it>
+# <Actor, named the way the use cases, journeys and diagrams name it>
 
 **Kind:** <person in a role | external system | agent>
 **Evidence:** <repository-relative paths and symbols where the code knows about this actor: a role, a claim, a client credential, a webhook sender, a registered client>
 
 ## What they want from the system
 
-<Their goals, in their own terms, one per line. Link the feature document or journey that serves each. Do not say what the system does for them; the feature document does.>
+<Their goals, in their own terms, one per line. Link the use case, journey or feature that serves each, by the path of its `.dev/` file. Do not say what the system does for them; those views do.>
 
 ## How they reach it
 

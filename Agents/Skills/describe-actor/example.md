@@ -7,8 +7,8 @@ Fictional example; not a description of this repository.
 
 ## What they want from the system
 
-- To see which messages are pending and how long they have waited ([Queue overview](../documentation/features/queue-overview.md)).
-- To retry or discard a message that keeps failing ([Replaying a failed message](../documentation/journeys/replaying-a-failed-message.md)).
+- To see which messages are pending and how long they have waited ([features](../src/ExampleWorker/.dev/feature.json), entity `queue-overview`).
+- To retry or discard a message that keeps failing ([use cases](../src/ExampleWorker/.dev/use-case.json), entity `replay-message`).
 
 ## How they reach it
 

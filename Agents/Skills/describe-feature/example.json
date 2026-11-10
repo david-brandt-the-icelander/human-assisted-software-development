@@ -15,6 +15,12 @@
       "id": "retry",
       "name": "Retry failed jobs",
       "description": "A failed job is tried again.",
+      "sources": [
+        {
+          "path": "src/ExampleWorker/Worker.cs",
+          "symbol": "ExampleWorker.Worker.RunAsync"
+        }
+      ],
       "behavior": "A job that fails is requeued until it has been tried three times.",
       "outcome": "Transient failures do not need an operator.",
       "constraints": [

@@ -1,0 +1,83 @@
+{
+  "$schema": "schema.json",
+  "kind": "use-case",
+  "title": "Example worker use cases",
+  "folder": "src/ExampleWorker",
+  "description": "Fictional example; not a description of this repository.",
+  "sources": [
+    {
+      "path": "src/ExampleWorker/Worker.cs",
+      "symbol": "ExampleWorker.Worker"
+    }
+  ],
+  "entities": [
+    {
+      "id": "process-job",
+      "name": "Process a queued job",
+      "description": "An operator's job is picked up, run and reported.",
+      "actor": "Operator",
+      "actorDocument": "Actors/example-operator.md",
+      "goal": "A submitted job finishes and its result is visible.",
+      "preconditions": [
+        "The operator is signed in."
+      ],
+      "postconditions": [
+        "The job is marked done or failed."
+      ],
+      "flow": [
+        {
+          "id": "submit",
+          "actor": "Operator",
+          "participantKind": "actor",
+          "action": "Submits a job from the admin page.",
+          "actorDocument": "Actors/example-operator.md"
+        },
+        {
+          "id": "run",
+          "actor": "Worker",
+          "participantKind": "system",
+          "action": "Takes the job from the queue and runs it.",
+          "sources": [
+            {
+              "path": "src/ExampleWorker/Worker.cs",
+              "symbol": "ExampleWorker.Worker.RunAsync"
+            }
+          ]
+        },
+        {
+          "id": "report",
+          "actor": "Worker",
+          "participantKind": "system",
+          "action": "Records the result on the job.",
+          "sources": [
+            {
+              "path": "src/ExampleWorker/Worker.cs",
+              "symbol": "ExampleWorker.Worker.ReportAsync"
+            }
+          ]
+        }
+      ],
+      "alternatives": [
+        {
+          "atStep": "run",
+          "condition": "The job throws.",
+          "outcome": "The job is marked failed with the error text.",
+          "sources": [
+            {
+              "path": "src/ExampleWorker/Worker.cs",
+              "symbol": "ExampleWorker.Worker.RunAsync"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "relatedViews": [
+    {
+      "kind": "operation",
+      "folder": "src/ExampleWorker",
+      "path": "src/ExampleWorker/.dev/operation.json",
+      "relationship": "The operations the steps call."
+    }
+  ]
+}

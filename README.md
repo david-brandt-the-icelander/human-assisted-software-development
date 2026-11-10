@@ -4,6 +4,12 @@ A methodology for software development in an age where AI has taken the driver's
 ## Layout
 
 ```
+Agents/
+  Knowledge/               the catalogue of knowledge files kept in .dev/ folders (vision, backlog,
+                           plans, decisions, requirements, delivery, operation and the rest): a schema
+                           and a fictional example per kind, and validate_knowledge.py
+  Skills/                  agent skills for the diagrams and behavior views kept in .dev/ folders,
+                           with their schemas, examples and validate_diagrams.py
 software-system-browser/   a static page that draws a repository's .dev/ diagrams and shows its
                            use cases, capabilities, features and operations,
                            live at https://icelander.net/v1/apps/architecture-browser

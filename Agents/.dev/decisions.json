@@ -1,0 +1,59 @@
+{
+  "$schema": "../Knowledge/schemas/decisions.schema.json",
+  "kind": "decisions",
+  "title": "Agents decisions",
+  "folder": "Agents",
+  "entities": [
+    {
+      "id": "own-dev-folders",
+      "title": "Where Skills/ and Knowledge/ keep their own .dev files",
+      "summary": "Skills/ and Knowledge/ are copied whole into other repositories, so a .dev folder inside them would travel with them; for now what is recorded about them is in Agents/.dev.",
+      "status": "open",
+      "context": "populate-dev gives every maintained folder a .dev folder, and the view skills say to write a view in the folder that owns the behavior. But Skills/ and Knowledge/ are copied unchanged to Meta/Agents/Skills/ and Meta/Agents/Knowledge/. A .dev file inside them would carry folder Agents/Skills or Agents/Knowledge into a repository where it lives elsewhere, and validate_knowledge.py there reports a folder that does not match the file's location (and validate_diagrams.py there rejects a view under Knowledge/, whose folder does not exist). In this repository, validate_diagrams.py does not walk Skills/ at all, so a view there would never be checked. So the validators' views and records, and the records about both folders, are kept in Agents/.dev for now.",
+      "waitingOn": "Owner",
+      "options": [
+        {
+          "title": "Keep them in Agents/.dev",
+          "consequences": "The copies stay unchanged and every file is checked; the records sit one folder above the code they describe."
+        },
+        {
+          "title": "Give Skills/ and Knowledge/ their own .dev folders, and leave .dev out when copying",
+          "consequences": "Each record sits beside its code; the installing steps in Skills/README.md and Knowledge/README.md change, and a copy is no longer the folder as it is here. Views in Skills/.dev stay unchecked unless validate_diagrams.py changes."
+        },
+        {
+          "title": "Give them their own .dev folders, and have the validators ignore .dev inside Meta/Agents",
+          "consequences": "Copies stay whole and each record sits beside its code; both validators change, and validate_diagrams.py must check its own folder's .dev while still skipping the skills."
+        }
+      ],
+      "evidenceStatus": "source-verified",
+      "sources": [
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "source_files"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "validate"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "check_document"
+        },
+        {
+          "path": "Agents/Skills/README.md",
+          "symbol": "Installing in a repository"
+        },
+        {
+          "path": "Agents/Skills/populate-dev/skill.md",
+          "symbol": "Choosing what each folder needs"
+        }
+      ],
+      "origin": {
+        "kind": "agent",
+        "by": "Coding agent",
+        "date": "2026-11-12",
+        "description": "Raised while giving this repository its own .dev folders."
+      }
+    }
+  ]
+}

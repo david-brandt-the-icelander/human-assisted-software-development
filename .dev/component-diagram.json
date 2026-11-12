@@ -1,0 +1,68 @@
+{
+  "$schema": "../Agents/Skills/describe-component-diagram/schema.json",
+  "kind": "component",
+  "title": "human-assisted-software-development",
+  "folder": ".",
+  "description": "HASD and what uses it: the repositories that copy its skills and knowledge catalogue, and the explorer that shows the .dev folders written to them.",
+  "sources": [
+    {
+      "path": "README.md",
+      "symbol": "Layout"
+    },
+    {
+      "path": "Agents/Skills/README.md",
+      "symbol": "Installing in a repository"
+    },
+    {
+      "path": "Agents/Knowledge/README.md",
+      "symbol": "Installing and validating"
+    }
+  ],
+  "components": [
+    {
+      "id": "hasd",
+      "name": "human-assisted-software-development",
+      "responsibility": "Keeps the original of the methodology's skills and knowledge catalogue.",
+      "folder": "."
+    },
+    {
+      "id": "agents",
+      "name": "Agents",
+      "responsibility": "The skills, view schemas, knowledge catalogue and the two validators an agent uses to document a repository in .dev folders.",
+      "folder": "Agents",
+      "diagram": "Agents/.dev/component-diagram.json"
+    },
+    {
+      "id": "adopting-repository",
+      "name": "Repository that adopts HASD",
+      "responsibility": "Copies Agents/Skills and Agents/Knowledge to Meta/Agents/, documents its folders in .dev folders and Actors/, and runs the validators from there.",
+      "external": true
+    },
+    {
+      "id": "cyberspace-explorer",
+      "name": "Cyberspace explorer",
+      "responsibility": "Shows a repository's .dev folders; it lives in its own repository.",
+      "external": true
+    }
+  ],
+  "relationships": [
+    {
+      "from": "hasd",
+      "to": "agents",
+      "kind": "contains",
+      "description": "The repository's one maintained folder of content."
+    },
+    {
+      "from": "adopting-repository",
+      "to": "agents",
+      "kind": "depends-on",
+      "description": "Copies Skills/ and Knowledge/ unchanged to Meta/Agents/ and follows them."
+    },
+    {
+      "from": "cyberspace-explorer",
+      "to": "agents",
+      "kind": "depends-on",
+      "description": "Reads .dev files written to the view schemas and knowledge catalogue."
+    }
+  ]
+}

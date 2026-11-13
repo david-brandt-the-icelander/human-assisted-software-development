@@ -1,0 +1,63 @@
+{
+  "$schema": "../Skills/describe-capability/schema.json",
+  "kind": "capability",
+  "title": "Agents capabilities",
+  "folder": "Agents",
+  "description": "What the Agents folder can do when called, as opposed to the skills an agent reads.",
+  "sources": [
+    {
+      "path": "Agents/Skills/validate_diagrams.py",
+      "symbol": "validate"
+    },
+    {
+      "path": "Agents/Knowledge/validate_knowledge.py",
+      "symbol": "main"
+    }
+  ],
+  "entities": [
+    {
+      "id": "dev-validation",
+      "name": "Validation of .dev folders",
+      "description": "Checks a repository's .dev files and actor files against the schemas kept here, and checks those schemas against their own examples first.",
+      "sources": [
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "validate"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "main"
+        }
+      ],
+      "responsibility": "Tells whoever runs it whether every view, knowledge file and actor file in a repository is well-formed, and which file to fix if not; it does not tell whether they are true.",
+      "operations": [
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "__main__"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "main"
+        }
+      ],
+      "access": [
+        "Nothing checks who runs it: anyone with a checkout and Python with jsonschema installed.",
+        "It only reads the repository; it changes no file."
+      ]
+    }
+  ],
+  "relatedViews": [
+    {
+      "kind": "operation",
+      "folder": "Agents",
+      "path": "Agents/.dev/operation.json",
+      "relationship": "The two validators through which it is reached."
+    },
+    {
+      "kind": "use-case",
+      "folder": "Agents",
+      "path": "Agents/.dev/use-case.json",
+      "relationship": "The use case that uses it."
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "../Agents/Knowledge/schemas/folder.schema.json",
+  "kind": "folder",
+  "title": "human-assisted-software-development",
+  "folder": ".",
+  "entities": [
+    {
+      "id": "folder",
+      "title": "human-assisted-software-development",
+      "summary": "HASD: a methodology for software development in which AI drives and humans guide, kept as the agent skills and knowledge catalogue other repositories copy.",
+      "purpose": "The repository root holds the methodology's agent-facing part in Agents/ (the skills, with their view schemas and validate_diagrams.py, and the knowledge catalogue, with its schemas and validate_knowledge.py), the actors its own .dev files name in Actors/, and AGENTS.md, the instructions for agents working here.",
+      "boundaries": [
+        "This repository is the original of Agents/Skills and Agents/Knowledge. Other repositories copy them to Meta/Agents/Skills and Meta/Agents/Knowledge, and a change is made here and copied there; this repository holds no Meta/Agents copy of itself.",
+        "Agents/Skills and Agents/Knowledge hold no .dev folder of their own, because they are copied whole; what is recorded about them is in Agents/.dev until the open decision there is taken.",
+        "The Cyberspace explorer, which shows a repository's .dev folders, lives in its own repository, cyberspace-explorer; nothing here builds or deploys it."
+      ],
+      "evidenceStatus": "source-verified",
+      "sources": [
+        {
+          "path": "README.md",
+          "symbol": "Layout"
+        },
+        {
+          "path": "Agents/Skills/README.md",
+          "symbol": "Installing in a repository"
+        },
+        {
+          "path": "Agents/Knowledge/README.md",
+          "symbol": "Installing and validating"
+        }
+      ],
+      "links": [
+        {
+          "path": "README.md",
+          "label": "README"
+        },
+        {
+          "path": "AGENTS.md",
+          "label": "Agent instructions"
+        },
+        {
+          "path": ".dev/component-diagram.json",
+          "label": "The repository and what uses it"
+        },
+        {
+          "path": "Agents/.dev/decisions.json",
+          "label": "Where Agents/Skills and Agents/Knowledge keep their own .dev files (open)"
+        },
+        {
+          "url": "https://github.com/david-brandt-the-icelander/cyberspace-explorer",
+          "label": "Cyberspace explorer"
+        }
+      ]
+    }
+  ]
+}

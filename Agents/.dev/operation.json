@@ -1,0 +1,110 @@
+{
+  "$schema": "../Skills/describe-operation/schema.json",
+  "kind": "operation",
+  "title": "Agents operations",
+  "folder": "Agents",
+  "description": "The two validators, each a command-line script that reads a repository and reports whether its files are well-formed. Both only read.",
+  "sources": [
+    {
+      "path": "Agents/Skills/validate_diagrams.py",
+      "symbol": "validate"
+    },
+    {
+      "path": "Agents/Knowledge/validate_knowledge.py",
+      "symbol": "main"
+    }
+  ],
+  "entities": [
+    {
+      "id": "validate-diagrams",
+      "name": "Validate views and actors",
+      "description": "Checks the nine view schemas and their fictional examples, then every .dev/*.json diagram and behavior view in the repository (skipping .git, node_modules, build output and the skills folder itself, and leaving knowledge kinds to validate_knowledge.py): schema, unique IDs, relationship endpoints, the folder it claims, cited sources, child diagrams, use-case alternatives and related views. If the repository has an Actors/ folder, every actor field, actorDocument and Markdown link to Actors/<name>.md must land on a file, and every actor file must be linked from another file.",
+      "sources": [
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "validate"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "check_graph"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "check_behavior_references"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "check_actors"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "source_files"
+        }
+      ],
+      "entrypoint": {
+        "path": "Agents/Skills/validate_diagrams.py",
+        "symbol": "__main__"
+      },
+      "action": "query",
+      "transport": "Command line: python3 Agents/Skills/validate_diagrams.py [repository-root]; in an adopting repository, python3 Meta/Agents/Skills/validate_diagrams.py. Without an argument the root is three folders above the script (Path(__file__).resolve().parents[3]).",
+      "authorization": "Nothing checks; anyone with a checkout and Python with jsonschema installed can run it.",
+      "result": "One line counting the schemas and examples validated, the views of each kind and the actor files, and exit status 0.",
+      "failures": [
+        "The first problem found stops the run with a ValueError naming the file and the problem, and a non-zero exit status.",
+        "No diagrams found, when the repository has no view at all.",
+        "Run here without an argument, the root is the folder that contains this repository, not the repository (see the backlog item validate-diagrams-default-root).",
+        "ModuleNotFoundError when jsonschema is not installed."
+      ]
+    },
+    {
+      "id": "validate-knowledge",
+      "name": "Validate knowledge files",
+      "description": "Checks every knowledge schema and that each kind has a fictional example that validates, then every .dev/*.json file whose kind is in the catalogue (skipping .git, node_modules and build output): its schema, that it is named after its kind, its $schema and folder, unique entity IDs, and that every path and entityId it mentions exists. Files of other kinds are skipped.",
+      "sources": [
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "main"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "load_validators"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "check_document"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "dev_files"
+        }
+      ],
+      "entrypoint": {
+        "path": "Agents/Knowledge/validate_knowledge.py",
+        "symbol": "main"
+      },
+      "action": "query",
+      "transport": "Command line: python3 Agents/Knowledge/validate_knowledge.py [repository-root]; in an adopting repository, python3 Meta/Agents/Knowledge/validate_knowledge.py. Without an argument the root is the current directory.",
+      "authorization": "Nothing checks; anyone with a checkout and Python with jsonschema installed can run it.",
+      "result": "Each problem as a line naming the file, then a line counting the kinds, examples, knowledge files checked and problems; exit status 0 when there are none.",
+      "failures": [
+        "Exit status 1 when any example or knowledge file has a problem; every problem is listed, not only the first.",
+        "A kind without an example is reported as Missing example.",
+        "ModuleNotFoundError when jsonschema is not installed."
+      ]
+    }
+  ],
+  "relatedViews": [
+    {
+      "kind": "capability",
+      "folder": "Agents",
+      "path": "Agents/.dev/capability.json",
+      "relationship": "The capability these operations reach."
+    },
+    {
+      "kind": "use-case",
+      "folder": "Agents",
+      "path": "Agents/.dev/use-case.json",
+      "relationship": "The use case whose steps run them."
+    }
+  ]
+}

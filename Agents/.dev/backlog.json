@@ -1,0 +1,45 @@
+{
+  "$schema": "../Knowledge/schemas/backlog.schema.json",
+  "kind": "backlog",
+  "title": "Agents backlog",
+  "folder": "Agents",
+  "entities": [
+    {
+      "id": "validate-diagrams-default-root",
+      "title": "validate_diagrams.py needs Meta/Agents/Skills to find the repository by default",
+      "type": "defect",
+      "status": "proposed",
+      "summary": "Without an argument, validate_diagrams.py takes the folder three levels above itself as the repository root, which is right only for a copy at Meta/Agents/Skills; run in this repository, it checks the folder that contains the repository and fails.",
+      "expected": "python3 Agents/Skills/validate_diagrams.py, run from this repository's root without an argument, checks this repository, as python3 Agents/Knowledge/validate_knowledge.py does by taking the current directory.",
+      "observed": "The default root is Path(__file__).resolve().parents[3]: from Agents/Skills that is the folder that contains the repository. The run walks that folder, sibling checkouts included, resolves every path against it, and stops at the first view it reads with Folder does not match diagram location. Passing the root, python3 Agents/Skills/validate_diagrams.py ., works.",
+      "reproduction": [
+        "From this repository's root, run python3 Agents/Skills/validate_diagrams.py with no argument: it stops with <repository folder>/.dev/component-diagram.json: Folder does not match diagram location.",
+        "Run python3 Agents/Skills/validate_diagrams.py . instead: it passes."
+      ],
+      "details": "AGENTS.md gives the command with the root passed, so the workaround is in place. The skills' instructions name Meta/Agents/Skills/validate_diagrams.py, which does not exist here; the validator was not changed while installing HASD's own .dev folders.",
+      "origin": {
+        "kind": "agent",
+        "by": "Coding agent",
+        "date": "2026-11-12",
+        "description": "Found while giving this repository its own .dev folders."
+      },
+      "evidenceStatus": "source-verified",
+      "sources": [
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "__main__"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "main"
+        }
+      ],
+      "links": [
+        {
+          "path": "AGENTS.md",
+          "label": "The validator commands for this repository"
+        }
+      ]
+    }
+  ]
+}

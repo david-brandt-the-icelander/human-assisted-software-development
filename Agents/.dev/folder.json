@@ -1,0 +1,57 @@
+{
+  "$schema": "../Knowledge/schemas/folder.schema.json",
+  "kind": "folder",
+  "title": "Agents",
+  "folder": "Agents",
+  "entities": [
+    {
+      "id": "folder",
+      "title": "Agents",
+      "summary": "The skills and the knowledge catalogue an agent follows to document a repository in .dev folders and Actors/, with a validator for each.",
+      "purpose": "Skills/ holds one folder per skill: the describe-* skills for the four diagrams, the five behavior views, actors and knowledge files, and populate-dev, which decides what a folder needs; each view skill has a schema and a fictional example, and validate_diagrams.py checks them and every view in a repository. Knowledge/ holds the catalogue of knowledge kinds: a schema per kind, common.schema.json, a fictional example per kind and validate_knowledge.py.",
+      "boundaries": [
+        "Skills/ and Knowledge/ are copied whole to Meta/Agents/Skills/ and Meta/Agents/Knowledge/ in other repositories. The skills' instructions name those paths, and validate_diagrams.py's default repository root assumes them (see the backlog); Agents/ itself and its .dev folder are not copied.",
+        "Every example.json, every describe-actor example.md and every file in Knowledge/examples/ is fictional and says so: they describe a made-up worker in src/ExampleWorker, not this repository.",
+        "No .dev folder inside Skills/ or Knowledge/: what is recorded about them is kept here until the open decision in this folder is taken.",
+        "The validators check that files are well-formed, not that they are true; truth is checked by reading the sources a file cites."
+      ],
+      "evidenceStatus": "source-verified",
+      "sources": [
+        {
+          "path": "Agents/Skills/README.md",
+          "symbol": "The skills"
+        },
+        {
+          "path": "Agents/Skills/README.md",
+          "symbol": "Installing in a repository"
+        },
+        {
+          "path": "Agents/Knowledge/README.md",
+          "symbol": "The kinds"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "validate"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "main"
+        }
+      ],
+      "links": [
+        {
+          "path": "Agents/Skills/README.md",
+          "label": "Agent skills"
+        },
+        {
+          "path": "Agents/Knowledge/README.md",
+          "label": "Knowledge files"
+        },
+        {
+          "path": "Agents/.dev/component-diagram.json",
+          "label": "Skills and Knowledge, and what they depend on"
+        }
+      ]
+    }
+  ]
+}

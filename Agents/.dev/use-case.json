@@ -1,0 +1,224 @@
+{
+  "$schema": "../Skills/describe-use-case/schema.json",
+  "kind": "use-case",
+  "title": "Agents use cases",
+  "folder": "Agents",
+  "description": "What an agent does with the validators before finishing a change to a repository's .dev folders.",
+  "sources": [
+    {
+      "path": "Agents/Skills/populate-dev/skill.md",
+      "symbol": "Checking"
+    },
+    {
+      "path": "Agents/Skills/validate_diagrams.py",
+      "symbol": "validate"
+    },
+    {
+      "path": "Agents/Knowledge/validate_knowledge.py",
+      "symbol": "main"
+    }
+  ],
+  "entities": [
+    {
+      "id": "check-dev-folders",
+      "name": "Check a repository's .dev folders",
+      "description": "Before finishing, an agent runs both validators from the repository root and fixes what they report.",
+      "sources": [
+        {
+          "path": "Agents/Skills/populate-dev/skill.md",
+          "symbol": "Checking"
+        },
+        {
+          "path": "Agents/Skills/describe-knowledge/skill.md",
+          "symbol": "Checking"
+        }
+      ],
+      "actor": "Coding agent",
+      "goal": "Know that every view, knowledge file and actor file it wrote is well-formed, or which file to fix.",
+      "preconditions": [
+        "A checkout of the repository, with the validators at Meta/Agents/ (here, at Agents/).",
+        "Python 3 with the jsonschema package installed."
+      ],
+      "postconditions": [
+        "Both validators have exited with status 0, or have named the files and the problems to fix.",
+        "No file in the repository has changed."
+      ],
+      "flow": [
+        {
+          "id": "run-diagrams",
+          "actor": "Coding agent",
+          "action": "Runs validate_diagrams.py from the repository root, here passing the root as its argument.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "__main__"
+            }
+          ],
+          "participantKind": "actor",
+          "actorDocument": "Actors/coding-agent.md"
+        },
+        {
+          "id": "check-view-schemas",
+          "actor": "validate_diagrams.py",
+          "action": "Checks each of the nine view schemas and validates its fictional example against it.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "validate"
+            }
+          ],
+          "participantKind": "system"
+        },
+        {
+          "id": "check-views",
+          "actor": "validate_diagrams.py",
+          "action": "Checks every .dev/*.json view in the repository, leaving knowledge kinds out.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "validate"
+            },
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "check_graph"
+            },
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "check_behavior_references"
+            }
+          ],
+          "participantKind": "system"
+        },
+        {
+          "id": "check-actors",
+          "actor": "validate_diagrams.py",
+          "action": "If Actors/ exists, checks that every link to an actor lands on a file and every actor file is linked, then prints the counts.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "check_actors"
+            }
+          ],
+          "participantKind": "system"
+        },
+        {
+          "id": "run-knowledge",
+          "actor": "Coding agent",
+          "action": "Runs validate_knowledge.py from the repository root.",
+          "sources": [
+            {
+              "path": "Agents/Knowledge/validate_knowledge.py",
+              "symbol": "main"
+            }
+          ],
+          "participantKind": "actor",
+          "actorDocument": "Actors/coding-agent.md"
+        },
+        {
+          "id": "check-knowledge-schemas",
+          "actor": "validate_knowledge.py",
+          "action": "Checks every knowledge schema and validates each kind's fictional example against it.",
+          "sources": [
+            {
+              "path": "Agents/Knowledge/validate_knowledge.py",
+              "symbol": "load_validators"
+            },
+            {
+              "path": "Agents/Knowledge/validate_knowledge.py",
+              "symbol": "main"
+            }
+          ],
+          "participantKind": "system"
+        },
+        {
+          "id": "check-knowledge-files",
+          "actor": "validate_knowledge.py",
+          "action": "Checks every .dev/*.json file whose kind is in the catalogue, prints each problem and the totals, and exits with status 0 or 1.",
+          "sources": [
+            {
+              "path": "Agents/Knowledge/validate_knowledge.py",
+              "symbol": "check_document"
+            },
+            {
+              "path": "Agents/Knowledge/validate_knowledge.py",
+              "symbol": "dev_files"
+            }
+          ],
+          "participantKind": "system"
+        }
+      ],
+      "alternatives": [
+        {
+          "atStep": "check-view-schemas",
+          "condition": "A schema or its example is not valid.",
+          "outcome": "The run stops with an error before any view is read.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "validate"
+            }
+          ]
+        },
+        {
+          "atStep": "check-views",
+          "condition": "A view fails a check.",
+          "outcome": "The run stops at that view with a ValueError naming the file and the problem; the agent fixes it and runs again.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "validate"
+            }
+          ]
+        },
+        {
+          "atStep": "check-views",
+          "condition": "The repository has no view.",
+          "outcome": "The run stops with No diagrams found.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "validate"
+            }
+          ]
+        },
+        {
+          "atStep": "check-actors",
+          "condition": "A link to Actors/ lands on no file, or an actor file is linked from nowhere.",
+          "outcome": "The run stops with an error naming the file.",
+          "sources": [
+            {
+              "path": "Agents/Skills/validate_diagrams.py",
+              "symbol": "check_actors"
+            }
+          ]
+        },
+        {
+          "atStep": "check-knowledge-files",
+          "condition": "An example or a knowledge file has problems.",
+          "outcome": "Every problem is printed with its file, and the script exits with status 1.",
+          "sources": [
+            {
+              "path": "Agents/Knowledge/validate_knowledge.py",
+              "symbol": "main"
+            }
+          ]
+        }
+      ],
+      "actorDocument": "Actors/coding-agent.md"
+    }
+  ],
+  "relatedViews": [
+    {
+      "kind": "operation",
+      "folder": "Agents",
+      "path": "Agents/.dev/operation.json",
+      "relationship": "The two operations the agent's steps call."
+    },
+    {
+      "kind": "capability",
+      "folder": "Agents",
+      "path": "Agents/.dev/capability.json",
+      "relationship": "The capability this use case uses."
+    }
+  ]
+}

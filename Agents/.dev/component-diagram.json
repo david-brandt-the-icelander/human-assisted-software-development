@@ -1,0 +1,109 @@
+{
+  "$schema": "../Skills/describe-component-diagram/schema.json",
+  "kind": "component",
+  "title": "Agents",
+  "folder": "Agents",
+  "description": "The skills and the knowledge catalogue, and what their validators depend on. Neither child has a diagram of its own; see the open decision in Agents/.dev/decisions.json.",
+  "sources": [
+    {
+      "path": "Agents/Skills/validate_diagrams.py",
+      "symbol": "validate"
+    },
+    {
+      "path": "Agents/Skills/validate_diagrams.py",
+      "symbol": "source_files"
+    },
+    {
+      "path": "Agents/Knowledge/validate_knowledge.py",
+      "symbol": "load_validators"
+    },
+    {
+      "path": "Agents/Knowledge/validate_knowledge.py",
+      "symbol": "dev_files"
+    },
+    {
+      "path": "Agents/Skills/describe-knowledge/skill.md",
+      "symbol": "Knowledge files"
+    },
+    {
+      "path": "Agents/Skills/populate-dev/skill.md",
+      "symbol": "Populating `.dev` folders"
+    }
+  ],
+  "components": [
+    {
+      "id": "agents",
+      "name": "Agents",
+      "responsibility": "Groups the skills and the knowledge catalogue an agent follows.",
+      "folder": "Agents"
+    },
+    {
+      "id": "skills",
+      "name": "Skills",
+      "responsibility": "The describe-* and populate-dev skills, the nine view schemas with fictional examples, the actor template, and validate_diagrams.py, which checks the schemas, their examples and every view and actor file in a repository.",
+      "folder": "Agents/Skills"
+    },
+    {
+      "id": "knowledge",
+      "name": "Knowledge",
+      "responsibility": "The catalogue of knowledge kinds: a schema per kind built on common.schema.json, a fictional example per kind, and validate_knowledge.py, which checks them and every knowledge file in a repository.",
+      "folder": "Agents/Knowledge"
+    },
+    {
+      "id": "documented-repository",
+      "name": "Documented repository",
+      "responsibility": "The repository the validators are run on: its .dev/*.json files, its Markdown files and its Actors/ folder.",
+      "external": true
+    },
+    {
+      "id": "jsonschema",
+      "name": "jsonschema package",
+      "responsibility": "Draft 2020-12 schema validation, with the referencing package's registry for the knowledge schemas' references to common.schema.json.",
+      "external": true
+    }
+  ],
+  "relationships": [
+    {
+      "from": "agents",
+      "to": "skills",
+      "kind": "contains",
+      "description": "Agents/Skills."
+    },
+    {
+      "from": "agents",
+      "to": "knowledge",
+      "kind": "contains",
+      "description": "Agents/Knowledge."
+    },
+    {
+      "from": "skills",
+      "to": "knowledge",
+      "kind": "depends-on",
+      "description": "validate_diagrams.py skips a .dev file whose kind has a schema in Knowledge/schemas, leaving it to validate_knowledge.py; describe-knowledge and populate-dev send the agent to Knowledge/README.md."
+    },
+    {
+      "from": "skills",
+      "to": "documented-repository",
+      "kind": "depends-on",
+      "description": "validate_diagrams.py walks the repository for .dev/*.json views and Markdown links to Actors/, and checks every path they cite exists."
+    },
+    {
+      "from": "knowledge",
+      "to": "documented-repository",
+      "kind": "depends-on",
+      "description": "validate_knowledge.py walks the repository for .dev/*.json knowledge files and checks every path they mention exists."
+    },
+    {
+      "from": "skills",
+      "to": "jsonschema",
+      "kind": "depends-on",
+      "description": "validate_diagrams.py validates schemas, examples and views with Draft202012Validator."
+    },
+    {
+      "from": "knowledge",
+      "to": "jsonschema",
+      "kind": "depends-on",
+      "description": "validate_knowledge.py validates with Draft202012Validator and resolves common.schema.json through a referencing Registry."
+    }
+  ]
+}

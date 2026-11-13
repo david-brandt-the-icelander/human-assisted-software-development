@@ -1,0 +1,78 @@
+{
+  "$schema": "../Knowledge/schemas/verification.schema.json",
+  "kind": "verification",
+  "title": "Agents verification",
+  "folder": "Agents",
+  "entities": [
+    {
+      "id": "view-schemas-and-examples",
+      "title": "View schemas and their examples",
+      "summary": "Every view schema in Skills/ is a valid schema and its fictional example passes it.",
+      "subject": [
+        {
+          "path": "Agents/.dev/component-diagram.json",
+          "description": "The Skills component."
+        }
+      ],
+      "criteria": [
+        "Each of the nine schema.json files is a valid JSON Schema Draft 2020-12.",
+        "Each example.json validates against the schema.json beside it, passes the graph checks (unique IDs, relationship endpoints, use-case alternatives) and points its $schema at that schema."
+      ],
+      "checks": [
+        {
+          "type": "automated",
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "validate",
+          "command": "python3 Agents/Skills/validate_diagrams.py ."
+        }
+      ],
+      "details": "Nothing checks describe-actor's template.md and example.md, or the skill.md files: validate_diagrams.py does not walk its own folder.",
+      "evidenceStatus": "source-verified",
+      "sources": [
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "validate"
+        },
+        {
+          "path": "Agents/Skills/validate_diagrams.py",
+          "symbol": "source_files"
+        }
+      ]
+    },
+    {
+      "id": "knowledge-schemas-and-examples",
+      "title": "Knowledge schemas and their examples",
+      "summary": "Every knowledge schema is a valid schema, and every kind has a fictional example that passes it.",
+      "subject": [
+        {
+          "path": "Agents/.dev/component-diagram.json",
+          "description": "The Knowledge component."
+        }
+      ],
+      "criteria": [
+        "Each file in Knowledge/schemas, common.schema.json included, is a valid JSON Schema Draft 2020-12.",
+        "Each kind has examples/<kind>.json, which validates against its schema, has unique entity IDs and points its $schema at that schema."
+      ],
+      "checks": [
+        {
+          "type": "automated",
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "main",
+          "command": "python3 Agents/Knowledge/validate_knowledge.py"
+        }
+      ],
+      "details": "The examples are checked without a repository root, so the paths they mention are not required to exist.",
+      "evidenceStatus": "source-verified",
+      "sources": [
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "load_validators"
+        },
+        {
+          "path": "Agents/Knowledge/validate_knowledge.py",
+          "symbol": "check_document"
+        }
+      ]
+    }
+  ]
+}
